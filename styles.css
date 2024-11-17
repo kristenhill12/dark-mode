@@ -1,0 +1,15 @@
+/* Body styling for Dark Mode */
+body {
+  margin: 0;
+  overflow: hidden;
+  background: #0a0d13; /* Deep dark color for the sky */
+}
+
+/* Ensure the canvas takes up the full screen */
+#container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
