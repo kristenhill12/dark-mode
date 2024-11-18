@@ -40,15 +40,12 @@ Array(500).fill().forEach(createStar);
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.05); // Subtle glow without light spill
 scene.add(ambientLight);
 
-// Clock for stable animations
-const clock = new THREE.Clock();
+// Rotation speed
+const rotationSpeed = 0.0000175; // Fine-tuned rotation speed
 
+// Animation loop
 function animate() {
-    const delta = clock.getDelta(); // Time between frames
-    const rotationSpeed = 0.0000175; // Fine-tuned rotation speed
-    
-    scene.rotation.y += delta * rotationSpeed; // Tie rotation to frame time
-    
+    scene.rotation.y += rotationSpeed; // Ensure consistent rotation
     renderer.render(scene, camera);
     requestAnimationFrame(animate);
 }
