@@ -42,7 +42,7 @@ scene.add(ambientLight);
 
 // Animation loop
 function animate() {
-    scene.rotation.y += 0.00002; // Slower and more subtle rotation
+    scene.rotation.y += 0.00001; // Slower and more subtle rotation
     renderer.render(scene, camera);
     requestAnimationFrame(animate);
 }
