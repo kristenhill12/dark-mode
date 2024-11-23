@@ -1,7 +1,6 @@
 /* Body styling for Dark Mode */
 body {
   margin: 0;
-  overflow: hidden;
   background: #0a0d13; /* Deep dark color for the sky */
 }
 
