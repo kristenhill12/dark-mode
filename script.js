@@ -41,7 +41,7 @@ const ambientLight = new THREE.AmbientLight(0xffffff, 0.05); // Subtle glow with
 scene.add(ambientLight);
 
 // Rotation speed
-const rotationSpeed = 0.0000175; // Fine-tuned rotation speed
+const rotationSpeed = 0.000025; // Slightly increased rotation speed
 
 // Animation loop
 function animate() {
