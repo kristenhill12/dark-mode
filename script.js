@@ -3,12 +3,13 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x00101a); // Dark mode friendly and consistent shade
 
 const camera = new THREE.PerspectiveCamera(
-    80,
+    75, // Slightly smaller FOV for a subtle zoom
     window.innerWidth / window.innerHeight,
     0.1,
     1500
 );
-camera.position.z = 50;
+
+camera.position.z = 45; // Slightly closer for a subtle zoom
 
 const renderer = new THREE.WebGLRenderer({
     alpha: false, // Disable transparency to avoid blending artifacts
@@ -41,7 +42,7 @@ const ambientLight = new THREE.AmbientLight(0xffffff, 0.05); // Subtle glow with
 scene.add(ambientLight);
 
 // Rotation speed
-const rotationSpeed = 0.00005; // Increased to make movement slightly more noticeable
+const rotationSpeed = 0.0001; // Slightly faster for noticeable but smooth rotation
 
 // Animation loop
 function animate() {
