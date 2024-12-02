@@ -9,7 +9,7 @@ const camera = new THREE.PerspectiveCamera(
     1500
 );
 
-camera.position.z = 40; // Slightly closer for a subtle zoom
+camera.position.z = 35; // Closer zoom for stars
 
 const renderer = new THREE.WebGLRenderer({
     alpha: false, // Disable transparency to avoid blending artifacts
@@ -22,7 +22,7 @@ document.body.appendChild(renderer.domElement);
 // Create rotating stars
 function createStar() {
     const geometry = new THREE.SphereGeometry(
-        Math.random() * 0.05 + 0.04, // Slightly larger size for stars
+        Math.random() * 0.06 + 0.05, // Slightly larger size for stars
         24,
         24
     );    
@@ -36,7 +36,7 @@ function createStar() {
 
     const [x, y, z] = Array(3)
         .fill()
-        .map(() => THREE.MathUtils.randFloatSpread(80)); // Even closer spread
+        .map(() => THREE.MathUtils.randFloatSpread(60)); // Reduced spread for closer stars
     star.position.set(x, y, z);
     scene.add(star);
 
@@ -46,7 +46,7 @@ function createStar() {
 // Add twinkling effect
 function twinkle(star) {
     const duration = Math.random() * 2000 + 1000; // Random duration for each star
-    const targetOpacity = Math.random() * 0.5 + 0.5; // Random opacity for sparkle
+    const targetOpacity = Math.random() * 0.6 + 0.6; // Brighter twinkle
 
     // Create a tween animation to simulate twinkling
     new TWEEN.Tween({ opacity: star.material.opacity })
