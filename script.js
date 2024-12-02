@@ -9,7 +9,7 @@ const camera = new THREE.PerspectiveCamera(
     1500
 );
 
-camera.position.z = 45; // Slightly closer for a subtle zoom
+camera.position.z = 40; // Slightly closer for a subtle zoom
 
 const renderer = new THREE.WebGLRenderer({
     alpha: false, // Disable transparency to avoid blending artifacts
@@ -22,16 +22,17 @@ document.body.appendChild(renderer.domElement);
 // Create rotating stars
 function createStar() {
     const geometry = new THREE.SphereGeometry(
-        Math.random() * 0.03 + 0.02, // Smaller size for stars
+        Math.random() * 0.04 + 0.03, // Slightly larger size for stars
         24,
         24
     );
+    
     const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
     const star = new THREE.Mesh(geometry, material);
 
     const [x, y, z] = Array(3)
-        .fill()
-        .map(() => THREE.MathUtils.randFloatSpread(120)); // Slightly closer spread
+    .fill()
+    .map(() => THREE.MathUtils.randFloatSpread(100)); // Reduced spread for closer stars
     star.position.set(x, y, z);
     scene.add(star);
 }
