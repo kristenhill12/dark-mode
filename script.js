@@ -22,7 +22,7 @@ document.body.appendChild(renderer.domElement);
 // Function to create stars
 function createStar() {
     const geometry = new THREE.SphereGeometry(
-        Math.random() * 0.15 + 0.1, // Larger stars for a closer feel
+        Math.random() * 0.2 + 0.1, // Bigger stars for enhanced visibility
         24,
         24
     );
@@ -37,7 +37,7 @@ function createStar() {
 
     const [x, y, z] = Array(3)
         .fill()
-        .map(() => THREE.MathUtils.randFloatSpread(15)); // Very reduced spread
+        .map(() => THREE.MathUtils.randFloatSpread(15)); // Tightly packed stars
     star.position.set(x, y, z);
     scene.add(star);
 
@@ -59,15 +59,15 @@ function twinkle(star) {
         .start();
 }
 
-// Create multiple stars
-Array(500).fill().forEach(createStar);
+// Create more stars for density
+Array(1000).fill().forEach(createStar); // Doubled the number of stars
 
 // Add subtle ambient lighting
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.1); // Slightly brighter ambient light
 scene.add(ambientLight);
 
-// Rotation speed
-const rotationSpeed = 0.002; // Faster rotation for dynamic effect
+// Increased rotation speed
+const rotationSpeed = 0.003; // Faster rotation for dynamic effect
 
 // Animation loop
 function animate() {
