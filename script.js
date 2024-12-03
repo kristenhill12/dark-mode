@@ -3,13 +3,13 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x00101a); // Dark background for space
 
 const camera = new THREE.PerspectiveCamera(
-    55, // Narrower FOV for an even closer view
+    50, // Narrower FOV for a closer view
     window.innerWidth / window.innerHeight,
     0.1,
-    300 // Reduced far clipping plane for a tighter view
+    200 // Further reduced far clipping plane for tighter focus
 );
 
-camera.position.z = 8; // Bring the camera much closer to the stars
+camera.position.z = 6; // Bring the camera very close to the stars
 
 const renderer = new THREE.WebGLRenderer({
     alpha: false,
@@ -22,7 +22,7 @@ document.body.appendChild(renderer.domElement);
 // Function to create stars
 function createStar() {
     const geometry = new THREE.SphereGeometry(
-        Math.random() * 0.3 + 0.2, // Bigger stars for enhanced visibility
+        Math.random() * 0.4 + 0.3, // Much larger stars
         24,
         24
     );
@@ -37,7 +37,7 @@ function createStar() {
 
     const [x, y, z] = Array(3)
         .fill()
-        .map(() => THREE.MathUtils.randFloatSpread(12)); // Very tightly packed stars
+        .map(() => THREE.MathUtils.randFloatSpread(10)); // Super tight spread
     star.position.set(x, y, z);
     scene.add(star);
 
@@ -47,7 +47,7 @@ function createStar() {
 // Add twinkling effect
 function twinkle(star) {
     const duration = Math.random() * 2000 + 1000; // Random twinkling duration
-    const targetOpacity = Math.random() * 0.8 + 0.2; // Brighter and more noticeable twinkles
+    const targetOpacity = Math.random() * 0.9 + 0.1; // Brighter and more noticeable twinkles
 
     new TWEEN.Tween({ opacity: star.material.opacity })
         .to({ opacity: targetOpacity }, duration)
@@ -59,15 +59,15 @@ function twinkle(star) {
         .start();
 }
 
-// Create many stars for dense field
-Array(2000).fill().forEach(createStar); // Dramatically increased star count
+// Create an ultra-dense star field
+Array(3000).fill().forEach(createStar); // Increased star count even more
 
 // Add subtle ambient lighting
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.2); // Slightly brighter ambient light
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.25); // Slightly brighter ambient light
 scene.add(ambientLight);
 
-// Drastically increased rotation speed
-const rotationSpeed = 0.01; // Fast rotation for "in-space" feel
+// Ultra-fast rotation speed
+const rotationSpeed = 0.015; // High speed for dynamic space effect
 
 // Animation loop
 function animate() {
