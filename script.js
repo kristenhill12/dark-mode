@@ -3,13 +3,13 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x00101a); // Deep dark background for space
 
 const camera = new THREE.PerspectiveCamera(
-    75, // Wider FOV for a more encompassing star field
+    80, // Wider FOV for an encompassing star field
     window.innerWidth / window.innerHeight,
     0.1,
-    50 // Tighter clipping plane for proximity
+    50 // Tighter clipping plane to focus stars near the camera
 );
 
-camera.position.z = 0.8; // Bring the camera into the star field for immersion
+camera.position.z = 0.5; // Extremely close for full immersion
 
 const renderer = new THREE.WebGLRenderer({
     alpha: false,
@@ -22,7 +22,7 @@ document.body.appendChild(renderer.domElement);
 // Function to create stars
 function createStar() {
     const geometry = new THREE.SphereGeometry(
-        Math.random() * 2 + 1, // Larger stars for presence
+        Math.random() * 2 + 1.5, // Bigger stars for proximity
         24,
         24
     );
@@ -46,8 +46,8 @@ function createStar() {
 
 // Add twinkling effect
 function twinkle(star) {
-    const duration = Math.random() * 1000 + 800; // Faster twinkling for dynamic effect
-    const targetOpacity = Math.random() * 0.6 + 0.4; // Subtle but visible twinkle
+    const duration = Math.random() * 800 + 500; // Faster twinkling for dynamic effect
+    const targetOpacity = Math.random() * 0.6 + 0.4; // Subtle yet noticeable twinkle
 
     new TWEEN.Tween({ opacity: star.material.opacity })
         .to({ opacity: targetOpacity }, duration)
@@ -59,15 +59,15 @@ function twinkle(star) {
         .start();
 }
 
-// Create a star field that surrounds the user
-Array(15000).fill().forEach(createStar); // Extreme density for full immersion
+// Create a hyper-dense star field
+Array(20000).fill().forEach(createStar); // Maximum star count for total immersion
 
 // Ambient light to illuminate stars subtly
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // Bright stars without glare
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.6); // Bright ambient light for vivid stars
 scene.add(ambientLight);
 
-// Faster but smooth rotation
-const rotationSpeed = 0.2; // Fast enough to notice but not distracting
+// Very fast rotation for noticeable movement
+const rotationSpeed = 0.3; // Fast and engaging rotation
 
 // Animation loop
 function animate() {
