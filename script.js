@@ -6,10 +6,10 @@ const camera = new THREE.PerspectiveCamera(
     50, // Narrower FOV for a closer view
     window.innerWidth / window.innerHeight,
     0.1,
-    200 // Further reduced far clipping plane for tighter focus
+    200 // Reduced far clipping plane
 );
 
-camera.position.z = 6; // Bring the camera very close to the stars
+camera.position.z = 4; // Bring the camera much closer to the stars
 
 const renderer = new THREE.WebGLRenderer({
     alpha: false,
@@ -22,7 +22,7 @@ document.body.appendChild(renderer.domElement);
 // Function to create stars
 function createStar() {
     const geometry = new THREE.SphereGeometry(
-        Math.random() * 0.4 + 0.3, // Much larger stars
+        Math.random() * 0.6 + 0.5, // Much bigger stars for proximity
         24,
         24
     );
@@ -37,7 +37,7 @@ function createStar() {
 
     const [x, y, z] = Array(3)
         .fill()
-        .map(() => THREE.MathUtils.randFloatSpread(10)); // Super tight spread
+        .map(() => THREE.MathUtils.randFloatSpread(8)); // Extremely tight spread
     star.position.set(x, y, z);
     scene.add(star);
 
@@ -47,7 +47,7 @@ function createStar() {
 // Add twinkling effect
 function twinkle(star) {
     const duration = Math.random() * 2000 + 1000; // Random twinkling duration
-    const targetOpacity = Math.random() * 0.9 + 0.1; // Brighter and more noticeable twinkles
+    const targetOpacity = Math.random() * 0.9 + 0.1; // Brighter twinkles
 
     new TWEEN.Tween({ opacity: star.material.opacity })
         .to({ opacity: targetOpacity }, duration)
@@ -60,14 +60,14 @@ function twinkle(star) {
 }
 
 // Create an ultra-dense star field
-Array(3000).fill().forEach(createStar); // Increased star count even more
+Array(4000).fill().forEach(createStar); // Maxed-out star count
 
 // Add subtle ambient lighting
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.25); // Slightly brighter ambient light
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.3); // Brighter ambient light
 scene.add(ambientLight);
 
 // Ultra-fast rotation speed
-const rotationSpeed = 0.015; // High speed for dynamic space effect
+const rotationSpeed = 0.03; // Faster rotation for a "space travel" feel
 
 // Animation loop
 function animate() {
