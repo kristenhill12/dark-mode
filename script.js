@@ -1,16 +1,16 @@
 // Scene setup
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x00101a); // Deep dark space background
+scene.background = new THREE.Color(0x00101a); // Deep dark background for space
 
 // Camera setup for extreme zoom-in
 const camera = new THREE.PerspectiveCamera(
-    70, // Narrower FOV to emphasize closeness
+    75, // Wide FOV for immersive coverage
     window.innerWidth / window.innerHeight,
     0.01,
-    5 // Tight clipping for very close stars
+    20 // Tight clipping for close stars
 );
 
-camera.position.z = 0.005; // Nearly inside the stars for total immersion
+camera.position.z = 0.1; // Zoomed extremely close to stars
 
 const renderer = new THREE.WebGLRenderer({
     alpha: false,
@@ -20,12 +20,12 @@ renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// Function to create stars with varied sizes
+// Function to create stars
 function createStar() {
     const geometry = new THREE.SphereGeometry(
-        Math.random() * 100 + 50, // Massive stars for dramatic foreground presence
-        32,
-        32
+        Math.random() * 2 + 1, // Stars range from medium to large
+        24,
+        24
     );
 
     const material = new THREE.MeshBasicMaterial({
@@ -38,7 +38,7 @@ function createStar() {
 
     const [x, y, z] = Array(3)
         .fill()
-        .map(() => THREE.MathUtils.randFloatSpread(0.05)); // Very tight spread for proximity
+        .map(() => THREE.MathUtils.randFloatSpread(5)); // Spread for immersive density
     star.position.set(x, y, z);
     scene.add(star);
 
@@ -47,8 +47,8 @@ function createStar() {
 
 // Add twinkling effect for dynamic stars
 function twinkle(star) {
-    const duration = Math.random() * 30 + 20; // Super-fast twinkling for magical sparkle
-    const targetOpacity = Math.random() * 0.8 + 0.3; // Bright dynamic twinkles
+    const duration = Math.random() * 1000 + 500; // Smooth but noticeable twinkles
+    const targetOpacity = Math.random() * 0.8 + 0.4; // Bright dynamic twinkles
 
     new TWEEN.Tween({ opacity: star.material.opacity })
         .to({ opacity: targetOpacity }, duration)
@@ -60,19 +60,19 @@ function twinkle(star) {
         .start();
 }
 
-// Create a hyper-dense and immersive star field
-Array(300000).fill().forEach(createStar); // Extreme star count for overwhelming density
+// Create a dense star field
+Array(2000).fill().forEach(createStar); // Balanced star count for immersive density
 
 // Bright ambient lighting for glowing stars
-const ambientLight = new THREE.AmbientLight(0xffffff, 2); // Vibrant and glowing stars
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.8); // Bright enough for glowing stars
 scene.add(ambientLight);
 
-// Very fast rotation for noticeable immersion
-const rotationSpeed = 4.5; // Rapid and dynamic rotation
+// Smooth rotation for magical motion
+const rotationSpeed = 0.3; // Noticeable but calming rotation
 
 // Animation loop
 function animate() {
-    scene.rotation.y += rotationSpeed; // Rotate dynamically for noticeable motion
+    scene.rotation.y += rotationSpeed; // Rotate dynamically for immersive effect
     TWEEN.update(); // Update twinkling animations
     renderer.render(scene, camera);
     requestAnimationFrame(animate);
