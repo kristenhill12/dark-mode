@@ -1,88 +1,55 @@
-// Scene setup
+// Set up the scene, camera, and renderer
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x00101a); // Deep dark background for space
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer();
 
-// Camera setup for extreme zoom-in
-const camera = new THREE.PerspectiveCamera(
-    75, // Wide FOV for immersive coverage
-    window.innerWidth / window.innerHeight,
-    0.01,
-    20 // Tight clipping for close stars
-);
-
-camera.position.z = 0.1; // Zoomed extremely close to stars
-
-const renderer = new THREE.WebGLRenderer({
-    alpha: false,
-    antialias: true,
-});
-renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// Function to create stars
-function createStar() {
-    const geometry = new THREE.SphereGeometry(
-        Math.random() * 2 + 1, // Stars range from medium to large
-        24,
-        24
-    );
+// Create star field
+function createStarField() {
+  const starGeometry = new THREE.BufferGeometry();
+  const starCount = 10000; // Dense star field
+  const starPositions = new Float32Array(starCount * 3); // Each star has x, y, z
 
-    const material = new THREE.MeshBasicMaterial({
-        color: 0xffffff,
-        transparent: true,
-        opacity: Math.random() * 0.5 + 0.5, // Bright and glowing stars
-    });
+  for (let i = 0; i < starCount * 3; i++) {
+    starPositions[i] = (Math.random() - 0.5) * 100; // Spread stars across a cube
+  }
 
-    const star = new THREE.Mesh(geometry, material);
+  starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
 
-    const [x, y, z] = Array(3)
-        .fill()
-        .map(() => THREE.MathUtils.randFloatSpread(5)); // Spread for immersive density
-    star.position.set(x, y, z);
-    scene.add(star);
+  const starMaterial = new THREE.PointsMaterial({
+    color: 0xffffff,
+    size: 0.7, // Star size
+  });
 
-    twinkle(star); // Add magical twinkling effect
+  const starField = new THREE.Points(starGeometry, starMaterial);
+  scene.add(starField);
+
+  return starField;
 }
 
-// Add twinkling effect for dynamic stars
-function twinkle(star) {
-    const duration = Math.random() * 1000 + 500; // Smooth but noticeable twinkles
-    const targetOpacity = Math.random() * 0.8 + 0.4; // Bright dynamic twinkles
+// Initialize the star field
+const starField = createStarField();
 
-    new TWEEN.Tween({ opacity: star.material.opacity })
-        .to({ opacity: targetOpacity }, duration)
-        .easing(TWEEN.Easing.Quadratic.InOut)
-        .onUpdate((obj) => {
-            star.material.opacity = obj.opacity; // Update star's opacity
-        })
-        .onComplete(() => twinkle(star)) // Loop the twinkle
-        .start();
-}
-
-// Create a dense star field
-Array(2000).fill().forEach(createStar); // Balanced star count for immersive density
-
-// Bright ambient lighting for glowing stars
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.8); // Bright enough for glowing stars
-scene.add(ambientLight);
-
-// Smooth rotation for magical motion
-const rotationSpeed = 0.3; // Noticeable but calming rotation
+camera.position.z = 30; // Zoom the camera closer for immersion
 
 // Animation loop
 function animate() {
-    scene.rotation.y += rotationSpeed; // Rotate dynamically for immersive effect
-    TWEEN.update(); // Update twinkling animations
-    renderer.render(scene, camera);
-    requestAnimationFrame(animate);
+  requestAnimationFrame(animate);
+
+  // Rotate the star field
+  starField.rotation.y += 0.001; // Subtle rotation
+  starField.rotation.x += 0.0005; // Add slight X-axis rotation for depth
+
+  renderer.render(scene, camera);
 }
 
 animate();
 
 // Resize handler for responsiveness
 window.addEventListener("resize", () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
 });
