@@ -1,16 +1,15 @@
 // Scene setup
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x00101a); // Dark background for space
-scene.fog = new THREE.FogExp2(0x00101a, 0.01); // Subtle fog for depth perception
 
 const camera = new THREE.PerspectiveCamera(
-    60, // Narrower FOV for closer zoom
+    60, // Narrower FOV for a closer view
     window.innerWidth / window.innerHeight,
     0.1,
-    1000 // Reduced far clipping plane for better performance
+    500 // Reduced far clipping plane for a tighter view
 );
 
-camera.position.z = 20; // Bring camera closer to the stars
+camera.position.z = 10; // Move the camera closer to the stars
 
 const renderer = new THREE.WebGLRenderer({
     alpha: false,
@@ -23,14 +22,14 @@ document.body.appendChild(renderer.domElement);
 // Function to create stars
 function createStar() {
     const geometry = new THREE.SphereGeometry(
-        Math.random() * 0.1 + 0.05, // Slightly larger stars
+        Math.random() * 0.15 + 0.1, // Larger stars for a closer feel
         24,
         24
     );
 
     const material = new THREE.MeshBasicMaterial({
         color: 0xffffff,
-        transparent: true,
+        transparent: true, // Enable opacity changes for twinkling
         opacity: Math.random() * 0.5 + 0.5, // Twinkling opacity range
     });
 
@@ -38,7 +37,7 @@ function createStar() {
 
     const [x, y, z] = Array(3)
         .fill()
-        .map(() => THREE.MathUtils.randFloatSpread(30)); // Reduced spread for density
+        .map(() => THREE.MathUtils.randFloatSpread(15)); // Very reduced spread
     star.position.set(x, y, z);
     scene.add(star);
 
@@ -48,7 +47,7 @@ function createStar() {
 // Add twinkling effect
 function twinkle(star) {
     const duration = Math.random() * 2000 + 1000; // Random twinkling duration
-    const targetOpacity = Math.random() * 0.6 + 0.6; // Randomized brightness
+    const targetOpacity = Math.random() * 0.8 + 0.2; // Brighter and more noticeable twinkles
 
     new TWEEN.Tween({ opacity: star.material.opacity })
         .to({ opacity: targetOpacity }, duration)
@@ -63,16 +62,16 @@ function twinkle(star) {
 // Create multiple stars
 Array(500).fill().forEach(createStar);
 
-// Subtle ambient lighting
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.1); // Increase brightness slightly
+// Add subtle ambient lighting
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.1); // Slightly brighter ambient light
 scene.add(ambientLight);
 
 // Rotation speed
-const rotationSpeed = 0.001; // Faster rotation for dynamic effect
+const rotationSpeed = 0.002; // Faster rotation for dynamic effect
 
 // Animation loop
 function animate() {
-    scene.rotation.y += rotationSpeed; // Increase rotation speed
+    scene.rotation.y += rotationSpeed; // Rotate the scene faster
     TWEEN.update(); // Update TWEEN animations for twinkling
     renderer.render(scene, camera);
     requestAnimationFrame(animate);
