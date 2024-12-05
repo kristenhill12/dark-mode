@@ -1,6 +1,6 @@
 // Three.js Scene Setup
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x00101a); // Deep, dark space background
+scene.background = new THREE.Color(0x00101a); // Deep, dark background
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.z = 3; // Close to stars
@@ -30,13 +30,12 @@ function createStarField() {
   const starMaterial = new THREE.ShaderMaterial({
     uniforms: {
       uColor: { value: new THREE.Color(0xffffff) }, // White stars
-      uTime: { value: 0 }, // Time for animation
     },
     vertexShader: `
       varying vec3 vPosition;
       void main() {
         vPosition = position;
-        gl_PointSize = 100.0 / -mvPosition.z; // Size of stars based on distance
+        gl_PointSize = 150.0 / -mvPosition.z; // Size of stars based on distance
         gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
       }
     `,
@@ -45,11 +44,12 @@ function createStarField() {
       varying vec3 vPosition;
 
       void main() {
-        vec2 coord = gl_PointCoord - vec2(0.5); // Get distance from center
-        float dist = length(coord); // Calculate distance from center
-        float glow = 1.0 - smoothstep(0.3, 0.5, dist); // Create glowing core
-        float rays = sin(10.0 * atan(coord.y, coord.x)) * glow; // Create rays
-        gl_FragColor = vec4(uColor, (glow + rays) * 0.8); // Combine glow and rays
+        vec2 coord = gl_PointCoord - vec2(0.5); // Center the coordinates
+        float dist = length(coord); // Distance from the center
+        float glow = smoothstep(0.5, 0.1, dist); // Create the glow effect
+        float rays = sin(8.0 * atan(coord.y, coord.x)) * (1.0 - dist); // Create radial spikes
+        float intensity = glow + rays * 0.5; // Combine glow and rays
+        gl_FragColor = vec4(uColor, intensity * 0.8); // Final star color and brightness
       }
     `,
     transparent: true,
@@ -66,7 +66,6 @@ scene.add(starField);
 
 // Animation Loop
 function animate() {
-  starField.material.uniforms.uTime.value += 0.05; // Update time for dynamic effects
   starField.rotation.y += 0.0008; // Smooth rotation
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
