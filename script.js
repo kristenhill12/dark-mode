@@ -1,6 +1,6 @@
 // Three.js Scene Setup
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x00101a); // Deep, dark background
+scene.background = new THREE.Color(0x00101a); // Deep, dark space background
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.z = 3; // Close to stars
@@ -29,26 +29,24 @@ function createStarField() {
 
   const starMaterial = new THREE.ShaderMaterial({
     uniforms: {
-      uColor: { value: new THREE.Color(0xffffff) }, // White stars
+      uColor: { value: new THREE.Color(0xffffff) }, // Star color
     },
     vertexShader: `
       varying vec3 vPosition;
       void main() {
         vPosition = position;
-        gl_PointSize = 150.0 / -mvPosition.z; // Size of stars based on distance
+        gl_PointSize = 200.0 / -mvPosition.z; // Size of stars based on distance
         gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
       }
     `,
     fragmentShader: `
       uniform vec3 uColor;
-      varying vec3 vPosition;
-
       void main() {
         vec2 coord = gl_PointCoord - vec2(0.5); // Center the coordinates
         float dist = length(coord); // Distance from the center
-        float glow = smoothstep(0.5, 0.1, dist); // Create the glow effect
-        float rays = sin(8.0 * atan(coord.y, coord.x)) * (1.0 - dist); // Create radial spikes
-        float intensity = glow + rays * 0.5; // Combine glow and rays
+        float glow = exp(-10.0 * dist); // Create the glowing center
+        float rays = sin(6.0 * atan(coord.y, coord.x)) * (1.0 - dist); // Add radial rays
+        float intensity = glow + rays * 0.3; // Combine glow and rays
         gl_FragColor = vec4(uColor, intensity * 0.8); // Final star color and brightness
       }
     `,
