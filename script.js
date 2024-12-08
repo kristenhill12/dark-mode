@@ -1,50 +1,43 @@
 // Scene Setup
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 30; // Bring the camera closer
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
+camera.position.z = 30; // Adjust camera position if needed
 const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// Star Parameters
-const starCount = 10000; // Increase the number of stars
-const starSize = 2.0; // Slightly larger stars
-const spread = 100; // Reduce the spread of stars for a denser look
-
-// Create Stars
-function createStars() {
+// Create Starry Sky
+function createStar() {
   const geometry = new THREE.BufferGeometry();
-  const positions = new Float32Array(starCount * 3); // x, y, z for each star
-
-  for (let i = 0; i < starCount; i++) {
-    // Generate stars in a confined box
-    positions[i * 3] = (Math.random() - 0.5) * spread; // x
-    positions[i * 3 + 1] = (Math.random() - 0.5) * spread; // y
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 50; // z (reduced depth)
-  }
-
-  geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+  const vertices = new Float32Array([
+    Math.random() * 200 - 100, // x position
+    Math.random() * 200 - 100, // y position
+    Math.random() * 200 - 100, // z position
+  ]);
+  geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
 
   const material = new THREE.PointsMaterial({
     color: 0xffffff,
-    size: starSize,
-    sizeAttenuation: true,
+    size: Math.random() * 2 + 1, // Varying star sizes for a natural look
     transparent: true,
-    opacity: 0.8,
+    opacity: 0.9,
+    sizeAttenuation: true,
   });
 
-  const stars = new THREE.Points(geometry, material);
-  scene.add(stars);
+  const star = new THREE.Points(geometry, material);
+  scene.add(star);
 }
 
-// Add Stars to the Scene
-createStars();
+// Add More Stars for a Dense Field
+const numStars = 10000; // Adjust for density
+for (let i = 0; i < numStars; i++) {
+  createStar();
+}
 
 // Animation Loop
 function animate() {
   requestAnimationFrame(animate);
-  scene.rotation.y += 0.0005; // Rotate slowly for depth effect
+  scene.rotation.y += 0.001; // Slightly faster rotation
   renderer.render(scene, camera);
 }
 animate();
