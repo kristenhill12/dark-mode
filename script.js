@@ -1,7 +1,7 @@
 // Scene Setup
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
-camera.position.z = 50; // Bring the camera closer for an immersive view
+camera.position.z = 30; // Adjust to 20 for even closer stars
 
 const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -19,18 +19,19 @@ function createStar() {
 
   const material = new THREE.PointsMaterial({
     color: 0xffffff,
-    size: Math.random() * 3 + 1, // Stars vary in size between 1 and 4
+    size: Math.random() * 4 + 2, // Larger stars
     transparent: true,
-    opacity: Math.random() * 0.5 + 0.5, // Random opacity for twinkle effect
-    sizeAttenuation: true, // Makes stars appear smaller when farther
+    opacity: Math.random() * 0.5 + 0.5, // Adds twinkle
+    sizeAttenuation: true,
   });
+  
 
   const star = new THREE.Points(geometry, material);
   scene.add(star);
 }
 
 // Add Many Stars
-const numStars = 5000; // Adjust density
+const numStars = 10000; // Higher density
 for (let i = 0; i < numStars; i++) {
   createStar();
 }
